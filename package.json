@@ -1,0 +1,24 @@
+{
+  "name": "rpi-sea-hub",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "bancroft": "0.0.13",
+    "node-gpsd": "^0.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sunker/rpi-sea-hub.git"
+  },
+  "author": "Erik Sundell",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sunker/rpi-sea-hub/issues"
+  },
+  "homepage": "https://github.com/sunker/rpi-sea-hub#readme"
+}
