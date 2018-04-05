@@ -3,7 +3,7 @@ const GpsCharacteristic = require('./GpsCharacteristic');
 const COUNTER_SERVICE_UUID = '00010000-9FAB-43C8-9231-40F6E305F96D';
 const GPS_CHAR_UUID = "00010001-9FAB-43C8-9231-40F6E305F96E";
 
-let gps = new GpsCharacteristic(GPS_CHAR_UUID);
+const gps = new GpsCharacteristic(GPS_CHAR_UUID);
 gps.start();
 
 
@@ -22,7 +22,9 @@ bleno.on("stateChange", state => {
 });
 
 bleno.on("advertisingStart", err => {
+
   console.log("Configuring services...");
+
   if (err) {
     console.error(err);
     return;
@@ -41,6 +43,7 @@ bleno.on("advertisingStart", err => {
   });
 });
 
+// some diagnostics
 bleno.on("stateChange", state => console.log(`Bleno: Adapter changed state to ${state}`));
 
 bleno.on("advertisingStart", err => console.log("Bleno: advertisingStart"));

@@ -5,7 +5,9 @@
   "main": "app.js",
   "dependencies": {
     "bancroft": "0.0.13",
-    "node-gpsd": "^0.3.0"
+    "bleno": "^0.5.0",
+    "node-gpsd": "^0.3.0",
+    "text-encoding": "^0.6.4"
   },
   "devDependencies": {},
   "scripts": {
