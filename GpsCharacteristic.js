@@ -28,6 +28,7 @@ module.exports = class GpsCharacteristic extends bleno.Characteristic {
     if (this.updateValueCallback) {
       let { longitude, latitude, timestamp, speed } = value
       speed = (speed * 1.943844492).toFixed(2)
+      speed = speed >= 0.1 ? speed : 0.00
       console.log('speed', speed)
       this.updateValueCallback(new TextEncoder().encode(`${longitude.toFixed(5)};${latitude.toFixed(5)};${timestamp};${speed}`));
     }
