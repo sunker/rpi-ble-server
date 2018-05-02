@@ -1,9 +1,12 @@
 const bleno = require('bleno');
+const GpsdClient = require('./GpsdClient');
 const GpsCharacteristic = require('./GpsCharacteristic');
 const COUNTER_SERVICE_UUID = '00010000-9FAB-43C8-9231-40F6E305F96D';
 const GPS_CHAR_UUID = "00010001-9FAB-43C8-9231-40F6E305F96E";
 
-let gps = new GpsCharacteristic(GPS_CHAR_UUID);
+
+const gpsdClient = new GpsdClient()
+let gps = new GpsCharacteristic(gpsdClient, GPS_CHAR_UUID);
 gps.start();
 
 

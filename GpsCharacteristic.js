@@ -4,74 +4,38 @@ const Bancroft = require('bancroft');
 const { TextEncoder } = require('text-encoding');
 
 module.exports = class GpsCharacteristic extends bleno.Characteristic {
-  constructor(uuid) {
+  constructor(gpsdClient, uuid) {
     super({
       uuid,
       properties: ["notify"],
       value: null
-    });
-
-    this.counter = 0;
+    })
+    this.previousSpeed = null
+    gpsdClient.on('coordinate', this.sendNotification)
   }
 
-  onSubscribe (maxValueSize, updateValueCallback) {
+  onSubscribe(maxValueSize, updateValueCallback) {
     this.updateValueCallback = updateValueCallback;
   }
 
-  onUnsubscribe () {
+  onUnsubscribe() {
     console.log("GPS unsubscribed");
     this.updateValueCallback = null;
   }
 
-  sendNotification (value) {
+  sendNotification(value) {
 
     if (this.updateValueCallback) {
       let { longitude, latitude, timestamp, speed } = value
-      speed = (speed * 1.943844492).toFixed(2)
       speed = speed >= 0.1 ? speed : 0.00
-      console.log('speed', speed)
-      this.updateValueCallback(new TextEncoder().encode(`${longitude.toFixed(5)};${latitude.toFixed(5)};${timestamp};${speed}`));
-    }
-  }
-
-  start () {
-    const daemon = new gpsd.Daemon({
-      program: 'gpsd',
-      device: '/dev/ttyAMA0',
-      port: 2947,
-      pid: '/tmp/gpsd.pid',
-      readOnly: false,
-      logger: {
-        info: function () { },
-        warn: console.warn,
-        error: console.error
+      
+      if (speed === 0.00 && this.previousSpeed === 0.00) {
+        console.log('Ignore emiting GPS coordinate')
+      } else {
+        console.log('speed', speed)
+        this.updateValueCallback(new TextEncoder().encode(`${longitude};${latitude};${timestamp};${speed}`));
       }
-    });
-    const self = this
-    daemon.start(function () {
-      console.log('Started');
-
-      const bancroft = new Bancroft();
-
-      bancroft.on('connect', () => {
-        console.log('GPIO connected');
-      });
-
-      bancroft.on('location', function (location) {
-        self.sendNotification(location);
-      });
-
-      bancroft.on('satellite', () => { });
-
-      bancroft.on('disconnect', () => {
-        console.log('GPIO disconnected');
-      });
-    });
-  }
-
-  stop () {
-    console.log("Stopping counter");
-    clearInterval(this.handle);
-    this.handle = null;
+      this.previousSpeed = speed
+    }
   }
 }
