@@ -21,6 +21,7 @@ module.exports = class GpsCharacteristic extends bleno.Characteristic {
 
   onUnsubscribe () {
     console.log("GPS unsubscribed");
+    this.previousSpeed = null
     this.updateValueCallback = null;
   }
 
