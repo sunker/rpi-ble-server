@@ -16,7 +16,7 @@ module.exports = class GpsCharacteristic extends bleno.Characteristic {
   }
 
   onSubscribe (maxValueSize, updateValueCallback) {
-    console.log("GPS subscribed", updateValueCallback)
+    console.log("GPS subscribed", maxValueSize)
     updateValueCallback(new TextEncoder().encode(TestCoordinates))
     this.updateValueCallback = updateValueCallback
   }
