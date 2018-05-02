@@ -24,8 +24,8 @@ module.exports = class GpsCharacteristic extends bleno.Characteristic {
   }
 
   sendNotification (value) {
+    console.log('speed1', value)
     if (this.updateValueCallback) {
-      console.log('speed1', value)
       let { longitude, latitude, timestamp, speed } = value
       speed = speed >= 0.1 ? speed : 0.00
       
