@@ -12,26 +12,26 @@ module.exports = class GpsCharacteristic extends bleno.Characteristic {
     })
     this.previousSpeed = null
     gpsdClient.on('coordinate', (coord) => {
-      console.log('coordinate')
       this.sendNotification(coord)
     })
   }
 
-  onSubscribe(maxValueSize, updateValueCallback) {
+  onSubscribe (maxValueSize, updateValueCallback) {
     this.updateValueCallback = updateValueCallback;
   }
 
-  onUnsubscribe() {
+  onUnsubscribe () {
     console.log("GPS unsubscribed");
     this.updateValueCallback = null;
   }
 
-  sendNotification(value) {
+  sendNotification (value) {
+    console.log('coordinate', value)
 
     if (this.updateValueCallback) {
       let { longitude, latitude, timestamp, speed } = value
       speed = speed >= 0.1 ? speed : 0.00
-      
+
       if (speed === 0.00 && this.previousSpeed === 0.00) {
         console.log('Ignore emiting GPS coordinate')
       } else {
