@@ -16,7 +16,6 @@ module.exports = class GpsCharacteristic extends bleno.Characteristic {
   }
 
   onSubscribe (maxValueSize, updateValueCallback) {
-    
     console.log("GPS subscribed", updateValueCallback)
     // updateValueCallback(new TextEncoder().encode(TestCoordinates))
     this.updateValueCallback = updateValueCallback
@@ -38,7 +37,7 @@ module.exports = class GpsCharacteristic extends bleno.Characteristic {
         console.log('Ignore emiting GPS coordinate')
       } else {
         console.log('Emiting speed:', speed)
-        this.updateValueCallback(new TextEncoder().encode(`${longitude}${latitude}${timestamp}${speed}`))
+        this.updateValueCallback(new TextEncoder().encode(`${longitude};${latitude};${timestamp};${speed}`))
       }
       this.previousSpeed = speed
     }
