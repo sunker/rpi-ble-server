@@ -15,6 +15,11 @@ module.exports = class GpsCharacteristic extends bleno.Characteristic {
   }
 
   onSubscribe (maxValueSize, updateValueCallback) {
+    var res = '43.2313;18.23424;234241341;2.23'
+    for (let index = 0; index < 3000; index++) {
+      res = res + '|' + '43.2313;18.23424;234241341;2.23'
+    }
+    updateValueCallback(new TextEncoder().encode(res));
     console.log("GPS subscribed", updateValueCallback);
     this.updateValueCallback = updateValueCallback;
   }
