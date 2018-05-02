@@ -28,6 +28,7 @@ module.exports = class GpsCharacteristic extends bleno.Characteristic {
     if (this.updateValueCallback) {
       let { longitude, latitude, timestamp, speed } = value
       speed = speed >= 0.1 ? speed : 0.00
+      speed = (speed >= 0.1 && speed <= 0.2) && this.previousSpeed === 0.00 ? 0.00 : speed
       
       if (speed === 0.00 && this.previousSpeed === 0.00) {
         console.log('Ignore emiting GPS coordinate')
