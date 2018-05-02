@@ -11,9 +11,7 @@ module.exports = class GpsCharacteristic extends bleno.Characteristic {
       value: null
     })
     this.previousSpeed = null
-    gpsdClient.on('coordinate', (coord) => {
-      this.sendNotification(coord)
-    })
+    gpsdClient.on('coordinate', this.sendNotification)
   }
 
   onSubscribe (maxValueSize, updateValueCallback) {
