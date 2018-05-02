@@ -15,6 +15,7 @@ module.exports = class GpsCharacteristic extends bleno.Characteristic {
   }
 
   onSubscribe (maxValueSize, updateValueCallback) {
+    console.log("GPS subscribed", updateValueCallback);
     this.updateValueCallback = updateValueCallback;
   }
 
