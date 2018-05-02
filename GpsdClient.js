@@ -31,7 +31,6 @@ module.exports = class GpsdClient extends EventEmitter {
       })
 
       bancroft.on('location', function (location) {
-        console.log('GPSD location event')
         let { longitude, latitude, timestamp, speed } = location
         speed = (speed * 1.943844492).toFixed(2)
         longitude = longitude.toFixed(5)
