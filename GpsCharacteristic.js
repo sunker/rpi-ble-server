@@ -2,7 +2,7 @@ const bleno = require('bleno')
 const gpsd = require('node-gpsd')
 const Bancroft = require('bancroft')
 const { TextEncoder } = require('text-encoding')
-const TestCoordinates = require('./testCoordinates')()
+// const TestCoordinates = require('./testCoordinates')()
 
 module.exports = class GpsCharacteristic extends bleno.Characteristic {
   constructor(gpsdClient, uuid) {
@@ -17,7 +17,7 @@ module.exports = class GpsCharacteristic extends bleno.Characteristic {
 
   onSubscribe (maxValueSize, updateValueCallback) {
     console.log("GPS subscribed", updateValueCallback)
-    updateValueCallback(new TextEncoder().encode(TestCoordinates))
+    // updateValueCallback(new TextEncoder().encode(TestCoordinates))
     this.updateValueCallback = updateValueCallback
   }
 
