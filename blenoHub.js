@@ -9,7 +9,7 @@ module.exports = {
   init: (gpsdClient) => {
     let gps = new GpsCharacteristic(gpsdClient, GPS_CHAR_UUID)
     let gpsRoute = new GpsRouteCharacteristic(GPS_ROUTE_CHAR_UUID)
-    
+
     bleno.on("stateChange", state => {
       if (state === "poweredOn") {
 
@@ -33,7 +33,7 @@ module.exports = {
 
       let service = new bleno.PrimaryService({
         uuid: GPS_CHAR_UUID,
-        characteristics: [gps]
+        characteristics: [gps, gpsRoute]
       })
 
       bleno.setServices([service], err => {
