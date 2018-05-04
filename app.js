@@ -1,4 +1,3 @@
-const bleno = require('bleno')
 const GpsdClient = require('./GpsdClient')
 const blenoHub = require('./blenoHub')
 
