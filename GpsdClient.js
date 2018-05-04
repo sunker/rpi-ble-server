@@ -1,5 +1,4 @@
 const EventEmitter = require('events').EventEmitter
-const bleno = require('bleno')
 const gpsd = require('node-gpsd')
 const Bancroft = require('bancroft')
 const { TextEncoder } = require('text-encoding')
