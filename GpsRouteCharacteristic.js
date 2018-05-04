@@ -12,9 +12,10 @@ module.exports = class GpsRouteCharacteristic extends bleno.Characteristic {
   }
 
   onSubscribe (maxValueSize, updateValueCallback) {
-    console.log("GPS subscribed", maxValueSize)
+    console.log("GPS route subscribed", maxValueSize)
     this.updateValueCallback = updateValueCallback
     setInterval(function () {
+      console.log("Emit röv", updateValueCallback)
       updateValueCallback(new TextEncoder().encode(`rööv`))
     }, 200)
     // mongo.coordinates.find({}).toArray(function (err, docs) {
