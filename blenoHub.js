@@ -1,14 +1,11 @@
 const bleno = require('bleno')
-const GpsPulseCharacteristic = require('./GpsPulseCharacteristic')
-const GpsRouteCharacteristic = require('./GpsRouteCharacteristic')
+const GpsCharacteristic = require('./GpsCharacteristic')
 const COUNTER_SERVICE_UUID = '00010000-9FAB-43C8-9231-40F6E305F96D'
-const GPS_CHAR_UUID = '00010001-9FAB-43C8-9231-40F6E305F96E'
-const GPS_ROUTE_CHAR_UUID = '00010001-9FAB-43C8-9231-40F6E305F96F'
+const GPS_CHAR_UUID = "00010001-9FAB-43C8-9231-40F6E305F96E"
 
 module.exports = {
   init: (gpsdClient) => {
-    let gps = new GpsPulseCharacteristic(gpsdClient, GPS_CHAR_UUID)
-    let gpsRoute = new GpsRouteCharacteristic(GPS_ROUTE_CHAR_UUID)
+    let gps = new GpsCharacteristic(gpsdClient, GPS_CHAR_UUID)
     bleno.on("stateChange", state => {
       if (state === "poweredOn") {
 
@@ -19,7 +16,6 @@ module.exports = {
       } else {
         console.log("Stopping...")
         gps.stop()
-        gpsRoute.stop()
         bleno.stopAdvertising()
       }
     })
@@ -33,7 +29,7 @@ module.exports = {
 
       let service = new bleno.PrimaryService({
         uuid: GPS_CHAR_UUID,
-        characteristics: [gps, gpsRoute]
+        characteristics: [gps]
       })
 
       bleno.setServices([service], err => {
