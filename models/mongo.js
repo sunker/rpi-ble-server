@@ -13,7 +13,7 @@ var mongo = {
       console.log('err', err)
       console.log("Connected successfully to mongodb")
       mongo.db = db
-      mongo.coordinates = db.collection('documents')
+      mongo.coordinates = db.collection('coordinates')
     })
   }
 }
