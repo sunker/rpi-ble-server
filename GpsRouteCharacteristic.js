@@ -11,19 +11,37 @@ module.exports = class GpsRouteCharacteristic extends bleno.Characteristic {
     })
   }
 
-  onSubscribe (maxValueSize, updateValueCallback) {
+
+  async getCoordinates () {
+    return new Promise((resolve, reject) => {
+      mongo.coordinates.find({}).toArray(function (err, docs) {
+        if (!err) {
+          console.log("Found the following records");
+          resolve(docs)
+        } else {
+          reject(err)
+        }
+      });
+    })
+  }
+
+  async delayedNotification (coord, delay = 1000) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        this.sendNotification(coord)
+        resolve()
+      }, delay);
+    })
+  }
+
+  async onSubscribe (maxValueSize, updateValueCallback) {
     console.log("GPS route subscribed", maxValueSize)
     this.updateValueCallback = updateValueCallback
-    setInterval(function () {
-      console.log("Emit röv", updateValueCallback)
-      updateValueCallback(new TextEncoder().encode(`rööv`))
-    }, 200)
-    // mongo.coordinates.find({}).toArray(function (err, docs) {
-    //   if (!err) {
-    //     console.log("Found the following records");
-    //     console.log(docs)
-    //   }
-    // });
+    const coordinates = await this.getCoordinates()
+    for (const coord of coordinates) {
+      await this.delayedFunction(coord, 100)
+    }
+
   }
 
   onUnsubscribe () {
@@ -32,7 +50,7 @@ module.exports = class GpsRouteCharacteristic extends bleno.Characteristic {
 
   sendNotification (value) {
     if (this.updateValueCallback) {
-
+      let { longitude, latitude, timestamp, speed } = value
       this.updateValueCallback(new TextEncoder().encode(`${longitude};${latitude};${timestamp};${speed}`))
     }
   }
