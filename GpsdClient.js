@@ -5,7 +5,7 @@ const Bancroft = require('bancroft')
 const { TextEncoder } = require('text-encoding')
 
 module.exports = class GpsdClient extends EventEmitter {
-  constructor(port = 2947) {
+  constructor(port) {
     super()
     const daemon = new gpsd.Daemon({
       program: 'gpsd',
@@ -41,8 +41,8 @@ module.exports = class GpsdClient extends EventEmitter {
 
       bancroft.on('satellite', () => { })
 
-      bancroft.on('disconnect', () => {
-        console.log('GPSD disconnected. Shutting down...')
+      bancroft.on('disconnect', (err) => {
+        console.log('GPSD disconnected. Shutting down...', err)
         process.exit(1)
       })
     })
