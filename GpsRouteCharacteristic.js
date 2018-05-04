@@ -39,7 +39,7 @@ module.exports = class GpsRouteCharacteristic extends bleno.Characteristic {
     this.updateValueCallback = updateValueCallback
     const coordinates = await this.getCoordinates()
     for (const coord of coordinates) {
-      await this.delayedFunction(coord, 100)
+      await this.delayedNotification(coord, 100)
     }
 
   }
