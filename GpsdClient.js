@@ -5,7 +5,7 @@ const Bancroft = require('bancroft')
 const { TextEncoder } = require('text-encoding')
 
 module.exports = class GpsdClient extends EventEmitter {
-  constructor(port) {
+  constructor(port = 2947) {
     super()
     const daemon = new gpsd.Daemon({
       program: 'gpsd',
