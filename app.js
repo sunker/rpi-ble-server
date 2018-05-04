@@ -5,7 +5,7 @@ const COUNTER_SERVICE_UUID = '00010000-9FAB-43C8-9231-40F6E305F96D'
 const GPS_CHAR_UUID = "00010001-9FAB-43C8-9231-40F6E305F96E"
 
 
-const gpsdClient = new GpsdClient(2948)
+const gpsdClient = new GpsdClient(2947)
 // const gpsdClient1 = new GpsdClient(3001)
 // const gpsdClient2 = new GpsdClient(3002)
 let gps = new GpsCharacteristic(gpsdClient, GPS_CHAR_UUID)
