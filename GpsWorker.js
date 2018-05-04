@@ -20,6 +20,7 @@ module.exports = (gpsdClient) => {
       if (mongo.coordinates) {
         mongo.coordinates.insert(doc, function (err) {
           if (err) console.log('error at mongo insert telemetry', err)
+          else console.log('Stored in db. Speed', doc.speed)
         })
       }
       // }

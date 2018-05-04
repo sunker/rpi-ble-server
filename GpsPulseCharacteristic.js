@@ -4,7 +4,7 @@ const Bancroft = require('bancroft')
 const { TextEncoder } = require('text-encoding')
 // const TestCoordinates = require('./testCoordinates')()
 
-module.exports = class GpsCharacteristic extends bleno.Characteristic {
+module.exports = class GpsPulseCharacteristic extends bleno.Characteristic {
   constructor(gpsdClient, uuid) {
     super({
       uuid,
