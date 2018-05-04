@@ -12,7 +12,7 @@ var mongo = {
     MongoClient.connect(url, function (err, db) {
       console.log("Connected successfully to mongodb")
       mongo.db = db
-      mongo.coordinates = db.collection('coordinates')
+      mongo.coordinates = db.collection('documents')
     })
   }
 }
