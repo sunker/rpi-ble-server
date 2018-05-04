@@ -10,6 +10,7 @@ var mongo = {
   connect: function () {
 
     MongoClient.connect(url, function (err, client) {
+      console.log('err', err)
       console.log("Connected successfully to mongodb")
       const db = client.db('annika');
       mongo.db = db
