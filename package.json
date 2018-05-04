@@ -6,7 +6,7 @@
   "dependencies": {
     "bancroft": "0.0.13",
     "bleno": "^0.5.0",
-    "mongodb": "^3.0.7",
+    "mongodb": "2.0.53",
     "node-gpsd": "^0.3.0",
     "text-encoding": "^0.6.4"
   },
