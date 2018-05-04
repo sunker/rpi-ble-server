@@ -8,7 +8,7 @@ const GPS_ROUTE_CHAR_UUID = '00010001-9FAB-43C8-9231-40F6E305F96F'
 module.exports = {
   init: (gpsdClient) => {
     let gps = new GpsPulseCharacteristic(gpsdClient, GPS_CHAR_UUID)
-    let gpsRoute = new GpsPulseCharacteristic(GPS_ROUTE_CHAR_UUID)
+    let gpsRoute = new GpsRouteCharacteristic(GPS_ROUTE_CHAR_UUID)
     bleno.on("stateChange", state => {
       if (state === "poweredOn") {
 
