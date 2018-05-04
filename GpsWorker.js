@@ -1,4 +1,4 @@
-const mongo = require('../model/mongo.js')
+const mongo = require('./model/mongo.js')
 
 module.exports = (gpsdClient) => {
   let coordinates = []
