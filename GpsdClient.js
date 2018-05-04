@@ -1,4 +1,3 @@
-const bleno = require('bleno')
 const EventEmitter = require('events').EventEmitter
 const bleno = require('bleno')
 const gpsd = require('node-gpsd')
