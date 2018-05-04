@@ -14,12 +14,14 @@ module.exports = (gpsdClient) => {
       }, 0) / coordinates.length
       console.log('Average speed: ', doc.speed)
       // if (doc.speed > 0.1) {
-        const d = new Date()
-        doc.createdAt = d.getTime()
-        doc.expiresAt = Date.now() + (1000 * 86400 * 3)
+      const d = new Date()
+      doc.createdAt = d.getTime()
+      doc.expiresAt = Date.now() + (1000 * 86400 * 3)
+      if (mongo.coordinates) {
         mongo.coordinates.insert(doc, function (err) {
           if (err) console.log('error at mongo insert telemetry', err)
         })
+      }
       // }
       coordinates = []
     }
