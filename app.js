@@ -5,7 +5,9 @@ const COUNTER_SERVICE_UUID = '00010000-9FAB-43C8-9231-40F6E305F96D'
 const GPS_CHAR_UUID = "00010001-9FAB-43C8-9231-40F6E305F96E"
 
 
-const gpsdClient = new GpsdClient()
+const gpsdClient = new GpsdClient(2948)
+const gpsdClient1 = new GpsdClient(2949)
+const gpsdClient2 = new GpsdClient(2950)
 let gps = new GpsCharacteristic(gpsdClient, GPS_CHAR_UUID)
 
 bleno.on("stateChange", state => {
