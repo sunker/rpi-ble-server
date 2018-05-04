@@ -1,6 +1,7 @@
 const bleno = require('bleno')
 const { TextEncoder } = require('text-encoding')
 const mongo = require('./models/mongo.js')
+const chunk = require('lodash.chunk')
 
 module.exports = class GpsRouteCharacteristic extends bleno.Characteristic {
   constructor(uuid) {
@@ -25,10 +26,12 @@ module.exports = class GpsRouteCharacteristic extends bleno.Characteristic {
     })
   }
 
-  async delayedNotification (coord, delay = 1000) {
+  async delayedNotification (value, delay = 1000) {
     return new Promise(resolve => {
       setTimeout(() => {
-        this.sendNotification(coord)
+        if (this.updateValueCallback) {
+          this.updateValueCallback(new TextEncoder().encode(value))
+        }
         resolve()
       }, delay);
     })
@@ -38,8 +41,12 @@ module.exports = class GpsRouteCharacteristic extends bleno.Characteristic {
     console.log("GPS route subscribed", maxValueSize)
     this.updateValueCallback = updateValueCallback
     const coordinates = await this.getCoordinates()
-    for (const coord of coordinates) {
-      await this.delayedNotification(coord, 100)
+    const stringCoordinates = coordinates.map(({ longitude, latitude, timestamp, speed }) => `${longitude};${latitude};${timestamp};${speed}`)
+    const chunkedCoordinates = chunk(stringCoordinates, 4)
+    for (const chunk of chunkedCoordinates) {
+      const string = chunk.join('|')
+      console.log(string)
+      await this.delayedNotification(string, 100)
     }
 
   }
@@ -50,7 +57,6 @@ module.exports = class GpsRouteCharacteristic extends bleno.Characteristic {
 
   sendNotification (value) {
     if (this.updateValueCallback) {
-      let { longitude, latitude, timestamp, speed } = value
       this.updateValueCallback(new TextEncoder().encode(`${longitude};${latitude};${timestamp};${speed}`))
     }
   }
