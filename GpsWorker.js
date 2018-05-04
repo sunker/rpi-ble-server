@@ -8,10 +8,10 @@ module.exports = (gpsdClient) => {
     if (coordinates.length > 0) {
       console.log('Add coordnates. Length: ', coordinates.length)
       const doc = coordinates[0]
-      doc.speed = coordinates.map(x => Number(x.speed || 0)).reduce((total, obj) => {
+      doc.speed = (coordinates.map(x => Number(x.speed || 0)).reduce((total, obj) => {
         total = total + obj
         return total
-      }, 0) / coordinates.length
+      }, 0) / coordinates.length).toFixed(2)
       console.log('Average speed: ', doc.speed)
       // if (doc.speed > 0.1) {
       const d = new Date()
