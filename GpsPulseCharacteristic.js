@@ -1,8 +1,6 @@
 const bleno = require('bleno')
 const gpsd = require('node-gpsd')
-const Bancroft = require('bancroft')
 const { TextEncoder } = require('text-encoding')
-// const TestCoordinates = require('./testCoordinates')()
 
 module.exports = class GpsPulseCharacteristic extends bleno.Characteristic {
   constructor(gpsdClient, uuid) {
