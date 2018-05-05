@@ -43,7 +43,7 @@ module.exports = class GpsdWorker extends EventEmitter {
         if (err) console.log('error at mongo insert telemetry', err)
         else console.log('Stored in db. Speed', doc.speed)
       })
-    }
+    } 
   }
 
   aggregate () {
@@ -57,7 +57,7 @@ module.exports = class GpsdWorker extends EventEmitter {
       console.log('Total distance: ', doc.totalDistance)
       // if (doc.speed > 0.1) {
       this.storeCoordinate(doc)
-      self.emit('totalDistance', doc.totalDistance)
+      this.emit('totalDistance', doc.totalDistance)
       // }
       this.previousCoordinate = doc
       this.coordinates = []
