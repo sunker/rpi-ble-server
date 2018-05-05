@@ -9,22 +9,16 @@ module.exports = (gpsdClient) => {
   setInterval(function () {
     if (coordinates.length > 0) {
       console.log('Add coordnates. Length: ', coordinates.length)
-      const doc = coordinates[0]
+      const doc = coordinates[coordinates.length - 1]
       doc.speed = (coordinates.map(x => Number(x.speed || 0)).reduce((total, obj) => {
         total = total + obj
         return total
       }, 0) / coordinates.length).toFixed(2)
-
-
-      doc.distance = previousCoordinate ? (coordinates.reduce((total, { latitude, longitude }) => {
-        const distance = getDistance(previousCoordinate, { latitude, longitude }, 1, 3)
-        console.log('distance', distance)
-        total += distance
-        console.log('total', total)
-        previousCoordinate = { latitude, longitude }
-        return total
-      }, 0)).toFixed(4) : 0
-      console.log('Total distance: ', doc.distance)
+      const { latitude, longitude } = doc
+      doc.distance = previousCoordinate ? getDistance(previousCoordinate, { latitude, longitude }, 1, 3).toFixed(4) : 0
+      console.log('Distance: ', doc.distance)
+      doc.totalDistance = previousCoordinate && previousCoordinate.totalDistance ? previousCoordinate.totalDistance + doc.distance : doc.distance
+      console.log('Total distance: ', doc.totalDistance)
       // if (doc.speed > 0.1) {
       const d = new Date()
       doc.createdAt = d.getTime()
@@ -37,7 +31,7 @@ module.exports = (gpsdClient) => {
       }
       // }
 
-      previousCoordinate = coordinates.pop()
+      previousCoordinate = doc
       coordinates = []
     }
   }, 6000)
