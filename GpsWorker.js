@@ -47,7 +47,6 @@ module.exports = class GpsdWorker extends EventEmitter {
   }
 
   aggregate () {
-    console.log('aggregate')
     if (this.coordinates.length > 0) {
       const doc = this.coordinates[this.coordinates.length - 1]
       doc.speed = this.getAverageSpeed()
