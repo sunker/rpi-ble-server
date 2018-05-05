@@ -23,7 +23,7 @@ module.exports = class GpsdWorker extends EventEmitter {
     gpsdClient.on('coordinate', coord => this.coordinates.push(coord))
 
     setInterval(() => {
-      this.aggregate()
+      this.aggregate().bind(this)
     }, 6000)
   }
 
