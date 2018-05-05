@@ -1,5 +1,4 @@
 const mongo = require('./models/mongo.js')
-const { getDistance } = require('geolib')
 
 function distance (lat1, lon1, lat2, lon2, unit = 'N') {
   var radlat1 = Math.PI * lat1 / 180
@@ -30,14 +29,11 @@ module.exports = (gpsdClient) => {
       }, 0) / coordinates.length).toFixed(2)
       const { latitude, longitude } = doc
 
-      doc.distance = previousCoordinate ? getDistance(previousCoordinate, { latitude, longitude }, 1, 3).toFixed(4) : 0
+      doc.distance = previousCoordinate ? distance(previousCoordinate.latitude, previousCoordinate.longitude, latitude, longitude).toFixed(8) : 0
       console.log('Distance: ', doc.distance)
-      if (previousCoordinate) console.log('Distance2: ', distance(previousCoordinate.latitude, previousCoordinate.longitude, latitude, longitude))
 
-      // console.log('previousCoordinate.totalDistance ', previousCoordinate.totalDistance )
-      doc.totalDistance = previousCoordinate && previousCoordinate.totalDistance ? (Number(previousCoordinate.totalDistance) + Number(doc.distance)) : Number(doc.distance)
+      doc.totalDistance = (previousCoordinate && previousCoordinate.totalDistance ? (Number(previousCoordinate.totalDistance) + Number(doc.distance)) : Number(doc.distance)).toFixed(2)
       console.log('Total distance: ', doc.totalDistance)
-      // console.log('Total distance2: ', previousCoordinate && previousCoordinate.totalDistance ? (Number(previousCoordinate.totalDistance) + Number(doc.distance)) : Number(doc.distance))
       // if (doc.speed > 0.1) {
       const d = new Date()
       doc.createdAt = d.getTime()
