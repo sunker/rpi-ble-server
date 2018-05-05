@@ -46,7 +46,7 @@ module.exports = class GpsRouteCharacteristic extends bleno.Characteristic {
     for (const chunk of chunkedCoordinates) {
       if (this.updateValueCallback) {
         const string = chunk.join('|')
-        console.log(string)
+        // console.log(string)
         await this.delayedNotification(string, 100)
       }
     }
