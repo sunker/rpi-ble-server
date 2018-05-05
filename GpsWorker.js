@@ -4,7 +4,7 @@ const { getDistance } = require('geolib')
 module.exports = (gpsdClient) => {
   let coordinates = []
   let previousCoordinate = null
-  gpsdClient.on('coordinate', (coord) => coordinates.push(coord))
+  gpsdClient.on('coordinate', coord => coordinates.push(coord))
 
   setInterval(function () {
     if (coordinates.length > 0) {
@@ -17,7 +17,8 @@ module.exports = (gpsdClient) => {
       const { latitude, longitude } = doc
       doc.distance = previousCoordinate ? getDistance(previousCoordinate, { latitude, longitude }, 1, 3).toFixed(4) : 0
       console.log('Distance: ', doc.distance)
-      doc.totalDistance = previousCoordinate && previousCoordinate.totalDistance ? previousCoordinate.totalDistance + doc.distance : doc.distance
+      console.log('previousCoordinate.totalDistance ', previousCoordinate.totalDistance )
+      doc.totalDistance = previousCoordinate && previousCoordinate.totalDistance ? (previousCoordinate.totalDistance + doc.distance) : doc.distance
       console.log('Total distance: ', doc.totalDistance)
       // if (doc.speed > 0.1) {
       const d = new Date()
