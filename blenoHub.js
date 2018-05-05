@@ -6,8 +6,8 @@ const GPS_CHAR_UUID = "00010001-9FAB-43C8-9231-40F6E305F96E"
 const GPS_ROUTE_CHAR_UUID = "00010001-9FAB-43C8-9231-40F6E305F96F"
 
 module.exports = {
-  init: (gpsdClient) => {
-    let gps = new GpsCharacteristic(gpsdClient, GPS_CHAR_UUID)
+  init: (gpsdClient, gpsdWorker) => {
+    let gps = new GpsCharacteristic(gpsdClient, gpsdWorker, GPS_CHAR_UUID)
     let gpsRoute = new GpsRouteCharacteristic(GPS_ROUTE_CHAR_UUID)
 
     bleno.on("stateChange", state => {

@@ -1,3 +1,4 @@
+const EventEmitter = require('events').EventEmitter
 const mongo = require('./models/mongo.js')
 
 function distance (lat1, lon1, lat2, lon2, unit = 'N') {
@@ -14,41 +15,53 @@ function distance (lat1, lon1, lat2, lon2, unit = 'N') {
   return dist
 }
 
-module.exports = (gpsdClient) => {
-  let coordinates = []
-  let previousCoordinate = null
-  gpsdClient.on('coordinate', coord => coordinates.push(coord))
+module.exports = class GpsdWorker extends EventEmitter {
+  constructor(gpsdClient) {
+    super()
+    this.coordinates = []
+    this.previousCoordinate = null
+    gpsdClient.on('coordinate', coord => this.coordinates.push(coord))
 
-  setInterval(function () {
-    if (coordinates.length > 0) {
-      console.log('Add coordnates. Length: ', coordinates.length)
-      const doc = coordinates[coordinates.length - 1]
-      doc.speed = (coordinates.map(x => Number(x.speed || 0)).reduce((total, obj) => {
-        total = total + obj
-        return total
-      }, 0) / coordinates.length).toFixed(2)
+    setInterval(() => {
+      this.aggregate()
+    }, 6000)
+  }
+
+  getAverageSpeed () {
+    return (this.coordinates.map(x => Number(x.speed || 0)).reduce((total, obj) => {
+      total = total + obj
+      return total
+    }, 0) / this.coordinates.length).toFixed(2)
+  }
+
+  storeCoordinate (doc) {
+    const d = new Date()
+    doc.createdAt = d.getTime()
+    doc.expiresAt = Date.now() + (1000 * 86400 * 3)
+    if (mongo.coordinates) {
+      mongo.coordinates.insert(doc, function (err) {
+        if (err) console.log('error at mongo insert telemetry', err)
+        else console.log('Stored in db. Speed', doc.speed)
+      })
+      console.log('previousCoordinate.totalDistance ', this.previousCoordinate.totalDistance)
+    }
+  }
+
+  aggregate () {
+    console.log('aggregate')
+    if (this.coordinates.length > 0) {
+      const doc = this.coordinates[coordinates.length - 1]
+      doc.speed = this.getAverageSpeed()
       const { latitude, longitude } = doc
-
-      doc.distance = previousCoordinate ? distance(previousCoordinate.latitude, previousCoordinate.longitude, latitude, longitude).toFixed(8) : 0
-      console.log('Distance: ', doc.distance)
-
-      doc.totalDistance = (previousCoordinate && previousCoordinate.totalDistance ? (Number(previousCoordinate.totalDistance) + Number(doc.distance)) : Number(doc.distance)).toFixed(6)
+      doc.distance = this.previousCoordinate ? distance(this.previousCoordinate.latitude, this.previousCoordinate.longitude, latitude, longitude).toFixed(8) : 0
+      doc.totalDistance = (this.previousCoordinate && this.previousCoordinate.totalDistance ? (Number(this.previousCoordinate.totalDistance) + Number(doc.distance)) : Number(doc.distance)).toFixed(6)
       console.log('Total distance: ', doc.totalDistance)
       // if (doc.speed > 0.1) {
-      const d = new Date()
-      doc.createdAt = d.getTime()
-      doc.expiresAt = Date.now() + (1000 * 86400 * 3)
-      if (mongo.coordinates) {
-        mongo.coordinates.insert(doc, function (err) {
-          if (err) console.log('error at mongo insert telemetry', err)
-          else console.log('Stored in db. Speed', doc.speed)
-        })
-        previousCoordinate = doc
-        console.log('previousCoordinate.totalDistance ', previousCoordinate.totalDistance)
-      }
+      this.storeCoordinate(doc)
+      self.emit('totalDistance', doc.totalDistance)
       // }
-
-      coordinates = []
+      this.previousCoordinate = doc
+      this.coordinates = []
     }
-  }, 6000)
+  }
 }

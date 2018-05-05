@@ -3,14 +3,16 @@ const gpsd = require('node-gpsd')
 const { TextEncoder } = require('text-encoding')
 
 module.exports = class GpsPulseCharacteristic extends bleno.Characteristic {
-  constructor(gpsdClient, uuid) {
+  constructor(gpsdClient, gpsdWorker, uuid) {
     super({
       uuid,
       properties: ["notify"],
       value: null
     })
+    this.totalDistance = 0
     this.previousSpeed = null
     gpsdClient.on('coordinate', this.sendNotification.bind(this))
+    gpsdWorker.on('totalDistance', (totalDistance) => this.totalDistance = totalDistance)
   }
 
   onSubscribe (maxValueSize, updateValueCallback) {
@@ -36,7 +38,7 @@ module.exports = class GpsPulseCharacteristic extends bleno.Characteristic {
         console.log('Ignore emiting GPS coordinate')
       } else {
         console.log('Emiting speed:', speed)
-        this.updateValueCallback(new TextEncoder().encode(`${longitude};${latitude};${timestamp};${speed}`))
+        this.updateValueCallback(new TextEncoder().encode(`${longitude};${latitude};${timestamp};${speed};${this.totalDistance}`))
       }
       this.previousSpeed = speed
     }

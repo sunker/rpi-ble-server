@@ -1,10 +1,10 @@
 const GpsdClient = require('./GpsdClient')
 const blenoHub = require('./blenoHub')
-const gpsWorker = require('./GpsWorker')
+const GpsWorker = require('./GpsWorker')
 const mongo = require('./models/mongo.js')
 
 mongo.connect()
 const gpsdClient = new GpsdClient()
-blenoHub.init(gpsdClient)
+const gpsdWorker = new GpsWorker(gpsdClient)
+blenoHub.init(gpsdClient, gpsdWorker)
 
-gpsWorker(gpsdClient)
