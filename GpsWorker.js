@@ -43,7 +43,6 @@ module.exports = class GpsdWorker extends EventEmitter {
         if (err) console.log('error at mongo insert telemetry', err)
         else console.log('Stored in db. Speed', doc.speed)
       })
-      console.log('previousCoordinate.totalDistance ', this.previousCoordinate.totalDistance)
     }
   }
 
