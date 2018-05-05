@@ -44,20 +44,16 @@ module.exports = class GpsRouteCharacteristic extends bleno.Characteristic {
     const stringCoordinates = coordinates.map(({ longitude, latitude, timestamp, speed }) => `${longitude};${latitude};${timestamp};${speed}`)
     const chunkedCoordinates = chunk(stringCoordinates, 4)
     for (const chunk of chunkedCoordinates) {
-      const string = chunk.join('|')
-      console.log(string)
-      await this.delayedNotification(string, 100)
+      if (this.updateValueCallback) {
+        const string = chunk.join('|')
+        console.log(string)
+        await this.delayedNotification(string, 100)
+      }
     }
 
   }
 
   onUnsubscribe () {
     this.updateValueCallback = null
-  }
-
-  sendNotification (value) {
-    if (this.updateValueCallback) {
-      this.updateValueCallback(new TextEncoder().encode(`${longitude};${latitude};${timestamp};${speed}`))
-    }
   }
 }
