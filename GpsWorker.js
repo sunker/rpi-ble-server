@@ -16,7 +16,7 @@ module.exports = (gpsdClient) => {
       }, 0) / coordinates.length).toFixed(2)
       const { latitude, longitude } = doc
       doc.distance = previousCoordinate ? getDistance(previousCoordinate, { latitude, longitude }, 1, 3).toFixed(4) : 0
-      console.log('Distance: ', doc.distance)
+      console.log('Distance: ', previousCoordinate.distance)
       console.log('previousCoordinate.totalDistance ', previousCoordinate.totalDistance )
       doc.totalDistance = previousCoordinate && previousCoordinate.totalDistance ? (previousCoordinate.totalDistance + doc.distance) : doc.distance
       console.log('Total distance: ', doc.totalDistance)
