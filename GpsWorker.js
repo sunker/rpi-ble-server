@@ -1,7 +1,9 @@
 const mongo = require('./models/mongo.js')
+const { getDistance } = require('geolib')
 
 module.exports = (gpsdClient) => {
   let coordinates = []
+  let previousCoordinate = null
   gpsdClient.on('coordinate', (coord) => coordinates.push(coord))
 
   setInterval(function () {
@@ -12,7 +14,17 @@ module.exports = (gpsdClient) => {
         total = total + obj
         return total
       }, 0) / coordinates.length).toFixed(2)
-      console.log('Average speed: ', doc.speed)
+
+
+      doc.distance = previousCoordinate ? (coordinates.reduce((total, { latitude, longitude }) => {
+        const distance = getDistance(previousCoordinate, { latitude, longitude }, 1, 3)
+        console.log('distance', distance)
+        total += distance
+        console.log('total', total)
+        previousCoordinate = { latitude, longitude }
+        return total
+      }, 0)).toFixed(4) : 0
+      console.log('Total distance: ', doc.distance)
       // if (doc.speed > 0.1) {
       const d = new Date()
       doc.createdAt = d.getTime()
@@ -24,6 +36,8 @@ module.exports = (gpsdClient) => {
         })
       }
       // }
+
+      previousCoordinate = coordinates.pop()
       coordinates = []
     }
   }, 6000)
