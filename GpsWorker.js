@@ -15,6 +15,7 @@ module.exports = (gpsdClient) => {
         return total
       }, 0) / coordinates.length).toFixed(2)
       const { latitude, longitude } = doc
+
       doc.distance = previousCoordinate ? getDistance(previousCoordinate, { latitude, longitude }, 1, 3).toFixed(4) : 0
       console.log('Distance: ', doc.distance)
       // console.log('previousCoordinate.totalDistance ', previousCoordinate.totalDistance )
@@ -29,11 +30,11 @@ module.exports = (gpsdClient) => {
           if (err) console.log('error at mongo insert telemetry', err)
           else console.log('Stored in db. Speed', doc.speed)
         })
+        previousCoordinate = doc
+        console.log('previousCoordinate.totalDistance ', previousCoordinate.totalDistance )
       }
       // }
 
-      previousCoordinate = doc
-      console.log('previousCoordinate.totalDistance ', previousCoordinate.totalDistance )
       coordinates = []
     }
   }, 6000)
