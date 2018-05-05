@@ -32,7 +32,8 @@ module.exports = (gpsdClient) => {
 
       doc.distance = previousCoordinate ? getDistance(previousCoordinate, { latitude, longitude }, 1, 3).toFixed(4) : 0
       console.log('Distance: ', doc.distance)
-      console.log('Distance2: ', distance(previousCoordinate.latitude, previousCoordinate.longitude, latitude, longitude))
+      if (previousCoordinate) console.log('Distance2: ', distance(previousCoordinate.latitude, previousCoordinate.longitude, latitude, longitude))
+
       // console.log('previousCoordinate.totalDistance ', previousCoordinate.totalDistance )
       doc.totalDistance = previousCoordinate && previousCoordinate.totalDistance ? (Number(previousCoordinate.totalDistance) + Number(doc.distance)) : Number(doc.distance)
       console.log('Total distance: ', doc.totalDistance)
