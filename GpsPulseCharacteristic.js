@@ -30,7 +30,7 @@ module.exports = class GpsPulseCharacteristic extends bleno.Characteristic {
   sendNotification (value) {
     // console.log('location', value)
     if (this.updateValueCallback) {
-      let { longitude, latitude, timestamp, speed } = value
+      let { longitude, latitude, timestamp, speed, track } = value
       speed = speed >= 0.1 ? speed : 0.00
       speed = (speed >= 0.1 && speed <= 0.2) && this.previousSpeed === 0.00 ? 0.00 : speed
 
@@ -38,7 +38,7 @@ module.exports = class GpsPulseCharacteristic extends bleno.Characteristic {
         console.log('Ignore emiting GPS coordinate')
       } else {
         console.log('Emiting speed:', speed)
-        this.updateValueCallback(new TextEncoder().encode(`${longitude};${latitude};${timestamp};${speed};${this.totalDistance}`))
+        this.updateValueCallback(new TextEncoder().encode(`${longitude};${latitude};${timestamp};${speed};${this.totalDistance};${track}`))
       }
       this.previousSpeed = speed
     }
