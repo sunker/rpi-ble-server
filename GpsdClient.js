@@ -6,7 +6,6 @@ const { TextEncoder } = require('text-encoding')
 module.exports = class GpsdClient extends EventEmitter {
   constructor(port = 2947) {
     super()
-    console.log('Port', port)
     const daemon = new gpsd.Daemon({
       program: 'gpsd',
       device: '/dev/ttyAMA0',
