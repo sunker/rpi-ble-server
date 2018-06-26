@@ -19,7 +19,7 @@ module.exports = {
 
       } else {
         console.log("Stopping...")
-        gps.stop()
+        // gps.stop()
         bleno.stopAdvertising()
       }
     })
