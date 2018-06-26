@@ -6,6 +6,7 @@ const { TextEncoder } = require('text-encoding')
 module.exports = class GpsdClient extends EventEmitter {
   constructor(port = 2947) {
     super()
+    console.log('Port', port)
     const daemon = new gpsd.Daemon({
       program: 'gpsd',
       device: '/dev/ttyAMA0',
@@ -31,12 +32,12 @@ module.exports = class GpsdClient extends EventEmitter {
 
       bancroft.on('location', function (location) {
         console.log('location', location)
-        let { longitude, latitude, timestamp, speed } = location
+        let { longitude, latitude, timestamp, speed, track } = location
         if (longitude) {
           speed = (speed * 1.943844492).toFixed(2)
           longitude = longitude.toFixed(5)
           latitude = latitude.toFixed(5)
-          self.emit('coordinate', { longitude, latitude, timestamp, speed })
+          self.emit('coordinate', { longitude, latitude, timestamp, speed, track })
         }
       })
 
