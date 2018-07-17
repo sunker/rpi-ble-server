@@ -24,7 +24,7 @@ module.exports = class GpsdWorker extends EventEmitter {
 
     setInterval(() => {
       this.aggregate()
-    }, 6000)
+    }, 2000)
   }
 
   getAverageSpeed () {
@@ -53,7 +53,6 @@ module.exports = class GpsdWorker extends EventEmitter {
         doc.speed = this.getAverageSpeed()
         const { latitude, longitude } = doc
         doc.distance = this.previousCoordinate ? distance(this.previousCoordinate.latitude, this.previousCoordinate.longitude, latitude, longitude).toFixed(8) : 0
-        console.log('this', this)
         console.log('doc.distance', doc.distance)
         console.log('this.previousCoordinate', this.previousCoordinate)
         console.log('this.previousCoordinate.totalDistance', this.previousCoordinate ? this.previousCoordinate.totalDistance : 'röv')
