@@ -52,6 +52,7 @@ module.exports = class GpsdWorker extends EventEmitter {
       doc.speed = this.getAverageSpeed()
       const { latitude, longitude } = doc
       doc.distance = this.previousCoordinate ? distance(this.previousCoordinate.latitude, this.previousCoordinate.longitude, latitude, longitude).toFixed(8) : 0
+      console.log('doc.distance', doc.distance)
       doc.totalDistance = (this.previousCoordinate && this.previousCoordinate.totalDistance ? (Number(this.previousCoordinate.totalDistance) + Number(doc.distance)) : Number(doc.distance)).toFixed(6)
       console.log('Total distance: ', doc.totalDistance)
       // if (doc.speed > 0.1) {
